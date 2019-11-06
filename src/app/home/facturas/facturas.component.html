@@ -1,0 +1,35 @@
+<div class="row mt-3 mb-3">
+  <div class="col">
+    <h3>Facturas</h3>
+  </div>
+  <div class="col text-right">
+    <button class="btn btn-outline-info" data-toggle="modal" data-target="#clienteModal"><i
+        class="fa fa-plus"></i></button>
+  </div>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">N° Consecutivo</th>
+      <th scope="col">Nit</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Fecha incio</th>
+      <th scope="col">Fecha fin</th>
+      <th>Opciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let f of facturas">
+      <th scope="row">SSI {{f.numero}}</th>
+      <td>{{f.cliente.nit}}</td>
+      <td>{{f.cliente.nombre}}</td>
+      <td>{{f.fechaInicio}}</td>
+      <td>{{f.fechaFin}}</td>
+      <td>
+        <button title="Generar Factura" class="btn btn-success btn-sm mr-1" data-toggle="modal">
+          <i class="fa fa-print" aria-hidden="true"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

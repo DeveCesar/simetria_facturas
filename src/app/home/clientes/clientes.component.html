@@ -1,0 +1,183 @@
+<div class="row mt-3 mb-3">
+  <div class="col">
+    <h3>Clientes</h3>
+  </div>
+  <div class="col text-right">
+    <button class="btn btn-outline-info" data-toggle="modal" data-target="#clienteModal"><i
+        class="fa fa-plus"></i></button>
+  </div>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">Nit</th>
+      <th scope="col">Nombre</th>
+      <th scope="col">Telefono</th>
+      <th scope="col">Direccion</th>
+      <th scope="col">Opciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let c of clientes">
+      <th scope="row">{{c.nit}}</th>
+      <td>{{c.nombre}}</td>
+      <td>{{c.tel}}</td>
+      <td>{{c.dir}}</td>
+      <td>
+        <button title="Borrar cliente" class="btn btn-danger btn-sm mr-1" (click)="eliminarCliente(c._id)">
+          <i class="fa fa-trash" aria-hidden="true"></i>
+        </button>
+        <button title="Generar Factura" class="btn btn-info btn-sm mr-1" data-toggle="modal"
+          data-target="#facturaModal" (click)="seleccionarCliente(c)">
+          <i class="fa fa-print" aria-hidden="true"></i>
+        </button>
+        <button title="Editar cliente" class="btn btn-success btn-sm" (click)="seleccionarCliente(c)" data-toggle="modal" data-target="#clienteModal">
+          <i class="fa fa-edit" aria-hidden="true"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- CLIENTE MODAL -->
+<div class="modal fade" id="clienteModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Cliente</h5>
+        <button id="closeClienteModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form ngNativeValidate (ngSubmit)="guardarCliente()">
+          <div class="form-group">
+            <label for="nit">Nit</label>
+            <input class="form-control" type="text" name="nit" [(ngModel)]="cliente.nit" ngModel required>
+          </div>
+          <div class="form-group">
+            <label for="nit">Nombre</label>
+            <input class="form-control" type="text" name="nombre" [(ngModel)]="cliente.nombre" ngModel required>
+          </div>
+          <div class="form-group">
+            <label for="nit">Telefono</label>
+            <input class="form-control" type="number" name="telefono" [(ngModel)]="cliente.tel" ngModel required>
+          </div>
+          <div class="form-group">
+            <label for="nit">Direccion</label>
+            <input class="form-control" type="text" name="direccion" [(ngModel)]="cliente.dir" ngModel required>
+          </div>
+          <button class="btn btn-primary flex" type="submit">
+            <span id="l-guardar" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+              style="display:none;"></span>
+            Guardar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FACTURA MODAL -->
+<div class="modal fade" id="facturaModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-largo" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Factura</h5>
+        <button id="closeFacturaModal" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form ngNativeValidate (ngSubmit)="guardarFactura()">
+          <div class="form-group">
+            <label> <b>Cliente</b></label>
+            <div class="row">
+              <div class="col">
+                <label for="nit">Nit</label>
+                <input class="form-control" type="text" name="nit" [(ngModel)]="cliente.nit" ngModel disabled>
+              </div>
+              <div class="col">
+                <label for="nombre">Nombre</label>
+                <input class="form-control" type="text" name="nombre" [(ngModel)]="cliente.nombre" ngModel disabled>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col">
+              <label for="nit">N° Consecutivo</label>
+              <input class="form-control" type="text" name="numero" [(ngModel)]="factura.numero" ngModel required disabled="">
+            </div>
+            <div class="form-group col">
+              <label for="fechainicio">Fecha inicio</label>
+              <input class="form-control" type="date" name="fechainicio" [(ngModel)]="factura.fechaInicio" ngModel required>
+            </div>
+            <div class="form-group col">
+              <label for="fechafin">Fecha fin</label>
+              <input class="form-control" type="date" name="fechafin" [(ngModel)]="factura.fechaFin" ngModel required>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col">
+              <label for="nit"><b>Buscar</b></label>
+              <input class="form-control w-50" type="search" placeholder="Search" aria-label="Search" placeholder="Buscar producto" [(ngModel)]="busqueda" list="productos" (change)="seleccionarProducto()" [ngModelOptions]="{standalone: true}">
+
+              <datalist id="productos">
+                <option *ngFor="let p of productos" [value]="p.titulo"></option>
+              </datalist>
+            </div>
+            <div class="col mt-4 text-right">
+              <h3><b>TOTAL:</b> $ {{totalFactura}}</h3>
+            </div>
+          </div>
+          <div class="table-wrapper">
+            <table class="table" *ngIf="this.detalles.length > 0">
+              <thead>
+                <tr>
+                  <th scope="col">Titulo</th>
+                  <th scope="col">Descripcion</th>
+                  <th scope="col">Unidad</th>
+                  <th scope="col">Cantidad</th>
+                  <th scope="col">Total</th>
+                  <th scope="col"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let d of detalles">
+                  <th width="20%">{{d.producto.titulo}}</th>
+                  <td>{{d.producto.descripcion}}</td>
+                  <td width="15%">$ {{d.producto.precio}}</td>
+                  <td width="5%">
+                    <input class="form-control" type="number" [(ngModel)]="d.cantidad" [ngModelOptions]="{standalone: true}" (change)="cambiarCantidad(d)" (keypress)="pulsar($event)">
+                  </td>
+                  <td width="15%">$ {{d.total}}</td>
+                  <td>
+                    <button title="Borrar producto" class="btn btn-danger btn-sm" (click)="eliminarProductoDetalle(d.producto)">
+                      <i class="fa fa-trash" aria-hidden="true"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>  
+          </div>
+          <hr>
+          <div class="row">
+            <div class="form-group col">
+              <label for="descuento"><b>Descuento</b></label>
+
+              <input type="number" class="form-control w-25" [(ngModel)]="factura.desc" [ngModelOptions]="{standalone: true}" (change)="calcularTotalFactura()" (keypress)="pulsar($event)" required>
+            </div>  
+          </div>
+          
+          
+
+          <button class="btn btn-primary flex" type="submit">
+            <span id="l-guardarfactura" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
+              style="display:none;"></span>
+            Generar y guardar
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

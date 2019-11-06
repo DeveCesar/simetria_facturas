@@ -1,0 +1,27 @@
+<div class="content">
+  <div id="header">
+    <img src="../../../assets/logo.png" alt="" width="30%">
+  </div>
+  <div class="container">
+    <div class="login">
+      <div class="login-triangle"></div>
+
+      <h2 class="login-header">Login</h2>
+
+      <form #frmLogin="ngForm" class="login-container" (ngSubmit)="onLogin(frmLogin)">
+        <p>
+          <input type="email" name="email" placeholder="Correo o usuario" [(ngModel)]="email" ngModel required>
+        </p>
+        <p>
+          <input type="password" name="password" placeholder="Contraseña" [(ngModel)]="password" ngModel required>
+        </p>
+        <p>
+          <input type="submit" value="Ingresar">
+        </p>
+      </form>
+    </div>
+    <div class="spinner-grow text-primary" role="status" id="spinner" >
+      <span class="sr-only">Cargando...</span>
+    </div>
+  </div>
+</div>

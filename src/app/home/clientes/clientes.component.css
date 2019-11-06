@@ -1,0 +1,14 @@
+.modal-largo{
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.table-wrapper {
+  max-height: 300px;
+  overflow: auto;
+  display:inline-block;
+}
+
+tbody{
+	font-size: 14px;
+}
